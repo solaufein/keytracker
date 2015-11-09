@@ -1,27 +1,41 @@
 package com.keytracker;
 
-import com.keytracker.file.MyWriter;
-
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ArgsResolver {
+    private static final String REGEX = "(mail|file|crypt)=(true|false)";
     private final String[] args;
 
-    private final Map<String, StoreMechanism> storeMechanismMap = new HashMap<>();
+    private final Map<String, Boolean> argsMap = new HashMap<>();
 
     public ArgsResolver(String[] args) {
         this.args = args;
-        storeMechanismMap.put("file", new FileStoreMechanism(keyAppender, writer));
+        parseArgsToMap();
     }
 
-    public StoreMechanism getStoreMechanism(KeyAppender keyAppender, MyWriter writer) {
+    public Map<String, Boolean> getArgsMap() {
+        return argsMap;
+    }
+
+    private void parseArgsToMap() {
         for (String arg : args) {
-            System.out.println(arg);
+            if (isArgCorrect(arg)) {
+                String[] split = arg.split("=");
+                String key = split[0];
+                boolean val = Boolean.valueOf(split[1]);
+                if (val) {
+                    argsMap.put(key, true);
+                }
+            }
         }
+    }
 
-        storeMechanismMap.get()
-
-        return new FileStoreMechanism(keyAppender, writer);
+    private boolean isArgCorrect(String arg) {
+        Pattern p = Pattern.compile(REGEX);
+        Matcher m = p.matcher(arg);
+        return m.matches();
     }
 }
