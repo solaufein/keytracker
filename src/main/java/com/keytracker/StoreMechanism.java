@@ -1,7 +1,5 @@
 package com.keytracker;
 
-import com.keytracker.encrypt.Encryptor;
-
 public interface StoreMechanism {
 
     enum Store {
@@ -11,6 +9,4 @@ public interface StoreMechanism {
     void store();
 
     void registerAppender(KeyAppender keyAppender);
-
-    void registerEncryptor(Encryptor encryptor);
 }

@@ -4,5 +4,5 @@ import com.keytracker.KeyAppender;
 import com.keytracker.encrypt.Encryptor;
 
 public interface Writer {
-    void write(KeyAppender keyAppender, Encryptor encryptor);
+    void write(String keyAppender);
 }

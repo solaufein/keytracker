@@ -18,7 +18,7 @@ public class KeyAppender {
     public String value() {
         return stringBuffer.toString();
     }
-
+    
     public void clear() {
         stringBuffer.setLength(0);
     }
