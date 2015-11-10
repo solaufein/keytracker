@@ -3,14 +3,17 @@ package com.keytracker;
 import com.keytracker.encrypt.Encryptor;
 import com.keytracker.file.Writer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CryptedStoreMechanism implements StoreMechanism {
     private final Encryptor encryptor;
-    private final Writer[] writers;
+    private final List<Writer> writers;
     private KeyAppender keyAppender;
 
-    public CryptedStoreMechanism(Encryptor encryptor, Writer... writers) {
+    public CryptedStoreMechanism(Encryptor encryptor) {
         this.encryptor = encryptor;
-        this.writers = writers;
+        this.writers = new ArrayList<>();
     }
 
     @Override
@@ -28,6 +31,11 @@ public class CryptedStoreMechanism implements StoreMechanism {
     @Override
     public void registerAppender(KeyAppender keyAppender) {
         this.keyAppender = keyAppender;
+    }
+
+    @Override
+    public void registerWriter(Writer writer) {
+        this.writers.add(writer);
     }
 
     private String encryptValue(KeyAppender keyAppender, Encryptor encryptor) {

@@ -2,12 +2,15 @@ package com.keytracker;
 
 import com.keytracker.file.Writer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BundledStoreMechanism implements StoreMechanism {
-    private final Writer[] writers;
+    private final List<Writer> writers;
     private KeyAppender keyAppender;
 
-    public BundledStoreMechanism(Writer... writers) {
-        this.writers = writers;
+    public BundledStoreMechanism() {
+        this.writers = new ArrayList<>();
     }
 
     @Override
@@ -23,5 +26,10 @@ public class BundledStoreMechanism implements StoreMechanism {
     @Override
     public void registerAppender(KeyAppender keyAppender) {
         this.keyAppender = keyAppender;
+    }
+
+    @Override
+    public void registerWriter(Writer writer) {
+        this.writers.add(writer);
     }
 }

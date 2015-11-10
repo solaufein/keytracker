@@ -3,12 +3,11 @@ package com.keytracker;
 import com.keytracker.file.Writer;
 
 public class SingleStoreMechanism implements StoreMechanism {
-
-    private final Writer writer;
+    private Writer writer;
     private KeyAppender keyAppender;
 
-    public SingleStoreMechanism(Writer writer) {
-        this.writer = writer;
+    public SingleStoreMechanism() {
+        writer = null;
     }
 
     @Override
@@ -19,5 +18,10 @@ public class SingleStoreMechanism implements StoreMechanism {
     @Override
     public void registerAppender(KeyAppender keyAppender) {
         this.keyAppender = keyAppender;
+    }
+
+    @Override
+    public void registerWriter(Writer writer) {
+        this.writer = writer;
     }
 }

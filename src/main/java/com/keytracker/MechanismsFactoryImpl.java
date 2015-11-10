@@ -1,46 +1,45 @@
 package com.keytracker;
 
 import com.keytracker.encrypt.Encryptor;
-import com.keytracker.encrypt.KeyGen;
 import com.keytracker.file.MyFileWriter;
 import com.keytracker.file.MyMailWriter;
-import com.keytracker.file.Writer;
 import com.keytracker.mail.MailSender;
 
-import static com.keytracker.ArgsResolver.MAIL;
+import javax.crypto.SecretKey;
 
 public class MechanismsFactoryImpl implements MechanismsFactory {
     private final ArgsResolver argsResolver;
-    private final KeyGen keyGen;
+    private final MailSender mailSender;
+    private final SecretKey secretKey;
 
-    public MechanismsFactoryImpl(ArgsResolver argsResolver, KeyGen keyGen) {
+    public MechanismsFactoryImpl(ArgsResolver argsResolver, MailSender mailSender, SecretKey secretKey) {
         this.argsResolver = argsResolver;
-        this.keyGen = keyGen;
+        this.mailSender = mailSender;
+        this.secretKey = secretKey;
     }
 
     @Override
     public StoreMechanism getStoreMechanism() {
-        Writer fileWriter = null;
-        Writer mailWriter = null;
+        StoreMechanism storeMechanism = storeMechanism();
 
         if (argsResolver.isFileArgPresent()) {
-            fileWriter = new MyFileWriter("secret");
+            storeMechanism.registerWriter(new MyFileWriter("secret"));
         }
         if (argsResolver.isMailArgPresent()) {
-            mailWriter = new MyMailWriter(new MailSender(), argsResolver.getArguments().get(MAIL));
+            storeMechanism.registerWriter(new MyMailWriter(mailSender, argsResolver.getEmail()));
         }
         if (!argsResolver.isMailOrFileArgPresent()) {
-            fileWriter = new MyFileWriter("secret");
+            storeMechanism.registerWriter(new MyFileWriter("secret"));
         }
 
-        return getStoreMechanism(fileWriter, mailWriter);
+        return storeMechanism;
     }
 
-    private StoreMechanism getStoreMechanism(Writer fileWriter, Writer mailWriter) {
+    private StoreMechanism storeMechanism() {
         if (argsResolver.isCryptArgPresent()) {
-            return new CryptedStoreMechanism(new Encryptor(keyGen.generate("DES"), "DES"), fileWriter, mailWriter);
+            return new CryptedStoreMechanism(new Encryptor(secretKey, "DES"));
         }
 
-        return new BundledStoreMechanism(fileWriter, mailWriter);
+        return new BundledStoreMechanism();
     }
 }
