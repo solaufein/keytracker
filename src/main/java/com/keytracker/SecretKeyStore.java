@@ -19,7 +19,9 @@ public class SecretKeyStore {
 
     public SecretKey secretKey() {
         SecretKey secretKey = keyGen.generate();
-        store(secretKey);
+        if (argsResolver.isCryptArgPresent()) {
+            store(secretKey);
+        }
 
         return secretKey;
     }

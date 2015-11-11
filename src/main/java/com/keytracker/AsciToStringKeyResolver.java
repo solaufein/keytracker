@@ -1,38 +1,28 @@
 package com.keytracker;
 
-import com.keytracker.handlers.*;
+import com.keytracker.handlers.HandlersProvider;
 import de.ksquared.system.keyboard.KeyEvent;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static com.keytracker.KeyResolver.MOD.*;
 
 
 public class AsciToStringKeyResolver implements KeyResolver {
+    private final HandlersProvider handlersProvider;
 
-    private final Map<MOD, ModifierHandler> modifierHandlers = new HashMap<>();
-    private final CharactersProvider charactersProvider;
-
-    public AsciToStringKeyResolver(CharactersProvider charactersProvider) {
-        this.charactersProvider = charactersProvider;
-
-        modifierHandlers.put(ALT, new AltHandler(charactersProvider));
-        modifierHandlers.put(SHIFT, new ShiftHandler(charactersProvider));
-        modifierHandlers.put(CTRL, new CtrlHandler(charactersProvider));
-        modifierHandlers.put(OTHER, new OtherCharacterHandler(charactersProvider));
+    public AsciToStringKeyResolver(HandlersProvider handlersProvider) {
+        this.handlersProvider = handlersProvider;
     }
 
     @Override
     public String resolve(KeyEvent keyEvent) {
         if (keyEvent.isShiftPressed()) {
-            return modifierHandlers.get(SHIFT).handle(keyEvent);
+            return handlersProvider.getHandler(SHIFT).handle(keyEvent);
         } else if (keyEvent.isAltPressed()) {
-            return modifierHandlers.get(ALT).handle(keyEvent);
+            return handlersProvider.getHandler(ALT).handle(keyEvent);
         } else if (keyEvent.isCtrlPressed()) {
-            return modifierHandlers.get(CTRL).handle(keyEvent);
+            return handlersProvider.getHandler(CTRL).handle(keyEvent);
         } else {
-            return modifierHandlers.get(OTHER).handle(keyEvent);
+            return handlersProvider.getHandler(OTHER).handle(keyEvent);
         }
     }
 }

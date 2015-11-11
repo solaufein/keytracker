@@ -29,7 +29,7 @@ public class ArgsResolver {
         if (isMailArgPresent()) {
             return argsMap.get(MAIL);
         }
-        return "radekjava2013";
+        return "radoslawwitek@gmail.com";
     }
 
     public boolean isFileArgPresent() {

@@ -22,9 +22,7 @@ public class CryptedStoreMechanism implements StoreMechanism {
 
         String encryptedValue = encryptValue(keyAppender, encryptor);
 
-        for (Writer writer : writers) {
-            if (writer != null) writer.write(encryptedValue);
-        }
+        writers.stream().filter(writer -> writer != null).forEach(writer -> writer.write(encryptedValue));
         keyAppender.clear();
     }
 

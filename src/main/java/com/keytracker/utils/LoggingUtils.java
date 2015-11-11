@@ -1,5 +1,7 @@
 package com.keytracker.utils;
 
+import de.ksquared.system.keyboard.KeyEvent;
+
 public class LoggingUtils {
     public static void logChar(Character c) {
         System.out.print(c);
@@ -21,6 +23,10 @@ public class LoggingUtils {
             System.out.println(c + " = " + j);
         }
         System.out.println("");
+    }
+
+    public static void printKeyCode(KeyEvent keyEvent) {
+        System.out.println("[KeyCode = " + keyEvent.getVirtualKeyCode() + "]");
     }
 
     public static String character(int charCode) {

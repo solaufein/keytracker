@@ -17,9 +17,7 @@ public class BundledStoreMechanism implements StoreMechanism {
     public void store() {
 //        System.out.print(keyAppender.value());
 
-        for (Writer writer : writers) {
-            if (writer != null) writer.write(keyAppender.value());
-        }
+        writers.stream().filter(writer -> writer != null).forEach(writer -> writer.write(keyAppender.value()));
         keyAppender.clear();
     }
 

@@ -20,7 +20,9 @@ public class MechanismsFactoryImpl implements MechanismsFactory {
 
     @Override
     public StoreMechanism getStoreMechanism() {
-        StoreMechanism storeMechanism = storeMechanism();
+        //todo zwrocic liste single StoreMechanismow? aby 'mail' mogl byc rzadziej wykonywany niz 'file'...
+        //todo Dodac do konstruktora StoreMechanism Parametry jak czesto ma byc wykonywane i je pobierac w executorze ?
+        StoreMechanism storeMechanism = determineStoreMechanism();
 
         if (argsResolver.isFileArgPresent()) {
             storeMechanism.registerWriter(new MyFileWriter("secret"));
@@ -35,7 +37,7 @@ public class MechanismsFactoryImpl implements MechanismsFactory {
         return storeMechanism;
     }
 
-    private StoreMechanism storeMechanism() {
+    private StoreMechanism determineStoreMechanism() {
         if (argsResolver.isCryptArgPresent()) {
             return new CryptedStoreMechanism(new Encryptor(secretKey, "DES"));
         }

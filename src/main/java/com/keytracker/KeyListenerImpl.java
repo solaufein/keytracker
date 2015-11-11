@@ -15,7 +15,7 @@ public class KeyListenerImpl implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-//        System.out.println("[KeyCode = " + keyEvent.getVirtualKeyCode() + "]");
+//        printKeyCode(keyEvent);
 //        printAsciFrom("{}:\"|");
 
         String resolvedKey = keyResolver.resolve(keyEvent);
