@@ -21,7 +21,9 @@ public class MechanismsFactoryImpl implements MechanismsFactory {
     @Override
     public StoreMechanism getStoreMechanism() {
         //todo zwrocic liste single StoreMechanismow? aby 'mail' mogl byc rzadziej wykonywany niz 'file'...
+        //todo albo porobic wiecej metod get_MailMechanism() get_FileMechsnsm()
         //todo Dodac do konstruktora StoreMechanism Parametry jak czesto ma byc wykonywane i je pobierac w executorze ?
+        //todo Mail ma uzywac extKeyAppendera
         StoreMechanism storeMechanism = determineStoreMechanism();
 
         if (argsResolver.isFileArgPresent()) {
