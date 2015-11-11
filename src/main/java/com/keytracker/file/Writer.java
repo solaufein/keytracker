@@ -1,8 +1,7 @@
 package com.keytracker.file;
 
-import com.keytracker.KeyAppender;
-import com.keytracker.encrypt.Encryptor;
+import com.keytracker.ValueProvider;
 
 public interface Writer {
-    void write(String value);
+    void write(ValueProvider value);
 }

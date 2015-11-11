@@ -1,36 +1,43 @@
 package com.keytracker.threads;
 
-import com.keytracker.StoreMechanism;
+import com.keytracker.storing.StoreMechanism;
+import com.keytracker.storing.StoreParameters;
 
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-public class ScheduleRunner {
-    private final StoreMechanism storeMechanism;
+public class MechanismsScheduleRunner {
     private final ScheduledExecutorService scheduledExecutorService;
+    private final List<StoreMechanism> storeMechanisms;
 
-    public ScheduleRunner(StoreMechanism storeMechanism) {
-        this.storeMechanism = storeMechanism;
+    public MechanismsScheduleRunner(List<StoreMechanism> storeMechanisms) {
+        this.storeMechanisms = storeMechanisms;
         this.scheduledExecutorService = Executors.newScheduledThreadPool(2);
     }
 
-    public ScheduleRunner schedule(StoreMechanism storeMechanism, long initialDelay, long period, TimeUnit timeUnit) {
+    public MechanismsScheduleRunner schedule(StoreMechanism storeMechanism, long initialDelay, long period, TimeUnit timeUnit) {
         this.scheduledExecutorService.scheduleAtFixedRate(storeMechanism::store, initialDelay, period, timeUnit);
         return this;
     }
 
-    public ScheduleRunner scheduleAll(long initialDelay, long period, TimeUnit timeUnit) {
-        Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(storeMechanism::store, initialDelay, period, timeUnit);
+    public MechanismsScheduleRunner schedule(StoreMechanism storeMechanism) {
+        StoreParameters storeParameters = storeMechanism.getStoreParameters();
+        this.scheduledExecutorService.scheduleAtFixedRate(storeMechanism::store, storeParameters.getInitialDelay(), storeParameters.getPeriod(), storeParameters.getTimeUnit());
         return this;
     }
 
-    public ScheduleRunner addShutdownHook(StoreMechanism storeMechanism) {
+    public void scheduleAll() {
+        storeMechanisms.forEach(this::schedule);
+    }
+
+    public MechanismsScheduleRunner addShutdownHook(StoreMechanism storeMechanism) {
         Runtime.getRuntime().addShutdownHook(new Thread(storeMechanism::store, "Shutdown-thread"));
         return this;
     }
 
-    public ScheduleRunner addShutdownHook() {
+    public MechanismsScheduleRunner addShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
             System.out.println("Performing some shutdown cleanup...");
             scheduledExecutorService.shutdown();

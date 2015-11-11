@@ -1,16 +1,17 @@
-package com.keytracker;
+package com.keytracker.storing;
 
+import com.keytracker.ValueProvider;
 import com.keytracker.file.Writer;
 
 public interface StoreMechanism {
 
     enum Store {
-        FILE, MAIL
+        FILE, MAIL;
     }
 
     void store();
 
-    void registerAppender(KeyAppender keyAppender);
+    StoreParameters getStoreParameters();
 
     void registerWriter(Writer writer);
 }

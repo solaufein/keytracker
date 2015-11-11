@@ -6,11 +6,11 @@ import de.ksquared.system.keyboard.KeyListener;
 public class KeyListenerImpl implements KeyListener {
 
     private final KeyResolver keyResolver;
-    private final KeyAppender keyAppender;
+    private final Appender appender;
 
-    public KeyListenerImpl(KeyResolver keyResolver, KeyAppender keyAppender) {
+    public KeyListenerImpl(KeyResolver keyResolver, Appender appender) {
         this.keyResolver = keyResolver;
-        this.keyAppender = keyAppender;
+        this.appender = appender;
     }
 
     @Override
@@ -19,7 +19,7 @@ public class KeyListenerImpl implements KeyListener {
 //        printAsciFrom("{}:\"|");
 
         String resolvedKey = keyResolver.resolve(keyEvent);
-        keyAppender.append(resolvedKey);
+        appender.append(resolvedKey);
     }
 
     @Override

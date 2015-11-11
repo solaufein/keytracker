@@ -1,5 +1,7 @@
 package com.keytracker.file;
 
+import com.keytracker.ValueProvider;
+
 import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -14,11 +16,13 @@ public class MyFileWriter implements Writer {
     }
 
     @Override
-    public void write(String value) {
+    public void write(ValueProvider valueProvider) {
         try (PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(file, true)))) {
-            printWriter.write(value);
+            printWriter.write(valueProvider.value());
         } catch (IOException ex) {
             System.err.println("Couldn't write this to file. IOException msg: " + ex.getMessage());
         }
+
+        valueProvider.clear();
     }
 }
