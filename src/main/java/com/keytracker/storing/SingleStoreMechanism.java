@@ -6,17 +6,17 @@ import com.keytracker.file.Writer;
 public class SingleStoreMechanism implements StoreMechanism {
     private final StoreParameters storeParameters;
     private Writer writer;
-    private ValueProvider writerValue;
+    private ValueProvider value;
 
-    public SingleStoreMechanism(ValueProvider writerValue, StoreParameters storeParameters) {
-        this.writerValue = writerValue;
+    public SingleStoreMechanism(ValueProvider value, StoreParameters storeParameters) {
+        this.value = value;
         this.storeParameters = storeParameters;
         writer = null;
     }
 
     @Override
     public void store() {
-        if (writer != null) writer.write(writerValue);
+        if (writer != null) writer.write(value);
     }
 
     @Override

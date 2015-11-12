@@ -17,12 +17,17 @@ public class MyFileWriter implements Writer {
 
     @Override
     public void write(ValueProvider valueProvider) {
+        String value = getValueAndClear(valueProvider);
         try (PrintWriter printWriter = new PrintWriter(new BufferedWriter(new FileWriter(file, true)))) {
-            printWriter.write(valueProvider.value());
+            printWriter.write(value);
         } catch (IOException ex) {
             System.err.println("Couldn't write this to file. IOException msg: " + ex.getMessage());
         }
+    }
 
+    private String getValueAndClear(ValueProvider valueProvider) {
+        String value = valueProvider.value();
         valueProvider.clear();
+        return value;
     }
 }

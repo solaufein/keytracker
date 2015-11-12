@@ -14,7 +14,13 @@ public class MyMailWriter implements Writer {
 
     @Override
     public void write(ValueProvider valueProvider) {
-        mailSender.send(valueProvider.extValue(), to);
+        String value = getValueAndClear(valueProvider);
+        mailSender.send(value, to);
+    }
+
+    private String getValueAndClear(ValueProvider valueProvider) {
+        String value = valueProvider.extValue();
         valueProvider.clearExt();
+        return value;
     }
 }

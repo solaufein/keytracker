@@ -1,21 +1,21 @@
 package com.keytracker;
 
 public class KeyAppender implements Appender, ValueProvider {
-    private final StringBuffer stringBuffer;
-    private final StringBuffer stringBufferExtended;
+    private static final String BS = "{BS}";
+    private final StringBuilder stringBuffer;
+    private final StringBuilder stringBufferExtended;
 
     public KeyAppender() {
-        stringBuffer = new StringBuffer("");
-        this.stringBufferExtended = new StringBuffer("");
+        this.stringBuffer = new StringBuilder("");
+        this.stringBufferExtended = new StringBuilder("");
     }
 
     @Override
     public void append(String key) {
-        if ("{BS}".equals(key)) {
-            backspace();        // todo
+        if (BS.equals(key)) {
+            backspace();
         } else {
-            stringBuffer.append(key);
-            stringBufferExtended.append(key);
+            appends(key);
         }
     }
 
@@ -39,13 +39,23 @@ public class KeyAppender implements Appender, ValueProvider {
         stringBufferExtended.setLength(0);
     }
 
+    private void appends(String key) {
+        stringBuffer.append(key);
+        stringBufferExtended.append(key);
+    }
+
     private void backspace() {
-        if (!isBufferEmpty()) {
+        delete(stringBuffer);
+        delete(stringBufferExtended);
+    }
+
+    private void delete(StringBuilder stringBuffer) {
+        if (!isBufferEmpty(stringBuffer)) {
             stringBuffer.delete(stringBuffer.length() - 1, stringBuffer.length());
         }
     }
 
-    private boolean isBufferEmpty() {
+    private boolean isBufferEmpty(StringBuilder stringBuffer) {
         return stringBuffer.length() == 0;
     }
 }

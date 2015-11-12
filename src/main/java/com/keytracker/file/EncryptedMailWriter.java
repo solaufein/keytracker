@@ -15,9 +15,14 @@ public class EncryptedMailWriter extends MyMailWriter {
 
     @Override
     public void write(ValueProvider valueProvider) {
-        String encryptedValue = encryptValue(valueProvider.extValue(), encryptor);
-        mailSender.send(encryptedValue, to);
+        String value = getValueAndClear(valueProvider);
+        mailSender.send(value, to);
+    }
+
+    private String getValueAndClear(ValueProvider valueProvider) {
+        String extValue = valueProvider.extValue();
         valueProvider.clearExt();
+        return encryptValue(extValue, encryptor);
     }
 
     private String encryptValue(String value, Encryptor encryptor) {
